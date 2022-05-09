@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>silly-name-generator</title>
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        height: 100%;
+        margin: 0;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background: linear-gradient(to right, #6a3093 0%, #a044ff 100%);
+      }
+      .word-class {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+        font-weight: bold;
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="word-class">
+      <h3 id="word"></h3>
+    </div>
+
+    <script type="text/javascript" src="words.js"></script>
+
+    <script>
+      const adjectives = words.adjectives;
+      const nouns = words.nouns;
+      const combined = words.adjectives.concat(words.nouns);
+
+      const randomAdjective = () => {
+        return adjectives[Math.floor(Math.random() * adjectives.length)];
+      };
+
+      const randomNoun = () => {
+        return nouns[Math.floor(Math.random() * nouns.length)];
+      };
+
+      const randomWord = () => {
+        return combined[Math.floor(Math.random() * combined.length)];
+      };
+
+      const randomMixed = () => {
+        let a;
+        if (Math.random() < 0.8) {
+          a = randomAdjective();
+        } else {
+          if (Math.random() < 0.6) {
+            a = randomAdjective() + randomWord();
+          } else {
+            a = randomWord() + randomAdjective();
+          }
+        }
+        let b;
+        if (Math.random() < 0.75) {
+          b = randomNoun();
+        } else {
+          b = randomWord() + randomNoun();
+        }
+        return a + "-" + b;
+      };
+
+      const multipleMixed = (count) => {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+          result += randomWord() + "-";
+        }
+        return result.slice(0, -1);
+      };
+
+      const allMixed = () => {
+        if (Math.random() < 0.5) {
+          return randomMixed();
+        } else {
+          return multipleMixed(Math.floor(Math.random() * 3) + 2, combined);
+        }
+      };
+
+      document.getElementById("word").innerHTML = allMixed();
+
+      document.addEventListener("keypress", (e) => {
+        if (e.key === " ") {
+          document.getElementById("word").innerHTML = allMixed();
+        }
+      });
+    </script>
+  </body>
+</html>
